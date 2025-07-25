@@ -1,11 +1,6 @@
-/* eslint-disable */
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
-  swcMinify: true,
-  experimental: {
-    appDir: false
-  }
-}
+  reactStrictMode: true
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
