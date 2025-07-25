@@ -31,6 +31,10 @@ export default function Home() {
     setBalance(data.balance);
   };
 
+  const handleDeleteTransaction = (id: string) => {
+    setTransactions((prev) => prev.filter((t) => t.id !== id));
+  };
+
   const handleExport = () => {
     const csv = [
       ['Date', 'Amount', 'Description', 'Category', 'Type'],
@@ -56,7 +60,7 @@ export default function Home() {
         <main className="min-h-screen p-4 max-w-2xl mx-auto">
           <Header balance={balance} onExport={handleExport} />
           <TransactionForm onAdd={handleNewTransaction} />
-          <TransactionList transactions={transactions} />
+          <TransactionList transactions={transactions} onDeleteTransaction={handleDeleteTransaction} />
         </main>
       </ThemeProvider>
     </>
