@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body {
+    height: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+
+  body {
+    @apply bg-white text-black dark:bg-gray-900 dark:text-white transition-colors;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply rounded-2xl p-4 border backdrop-blur-md shadow;
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .dark .glass-card {
+    background: rgba(0, 0, 0, 0.3);
+  }
+
+  .glass-button {
+    @apply px-4 py-2 rounded-xl backdrop-blur-md transition hover:scale-105;
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .dark .glass-button {
+    background: rgba(0, 0, 0, 0.2);
+  }
+
+  .glass-input {
+    @apply w-full px-4 py-2 rounded-xl border backdrop-blur-md;
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .dark .glass-input {
+    background: rgba(0, 0, 0, 0.2);
+  }
+
+  .glass-select {
+    @apply px-4 py-2 rounded-xl border backdrop-blur-md;
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .dark .glass-select {
+    background: rgba(0, 0, 0, 0.2);
+  }
+}
