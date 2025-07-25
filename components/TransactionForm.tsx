@@ -7,6 +7,7 @@ interface Props {
 
 export const TransactionForm: React.FC<Props> = ({ onAdd }) => {
   const [form, setForm] = useState<Transaction>({
+    id: Date.now().toString(),
     date: new Date().toISOString().split('T')[0],
     amount: 0,
     description: '',
@@ -26,6 +27,7 @@ export const TransactionForm: React.FC<Props> = ({ onAdd }) => {
     e.preventDefault();
     onAdd(form);
     setForm({
+      id: Date.now().toString(),
       date: new Date().toISOString().split('T')[0],
       amount: 0,
       description: '',
