@@ -1,11 +1,30 @@
+/**
+ * Describes a single ledger transaction.
+ *
+ * The original implementation stored a `status` (pending/posted) and
+ * tracked who entered the transaction (`user` or `partner`).  For a
+ * joint account where everything is considered posted immediately,
+ * those properties add unnecessary complexity.  The simplified
+ * `Transaction` type now includes only the data required to
+ * calculate balances and display records: an ID, date, description,
+ * amount, category and whether it’s a debit (money out) or credit
+ * (money in).
+ */
 export interface Transaction {
   id: string;
+  /** ISO-8601 date string (YYYY-MM-DD) */
   date: string;
+  /** Brief description of the transaction */
   description: string;
+  /** Monetary amount of the transaction */
   amount: number;
+  /** Category under which this transaction is filed */
   category: string;
-  status: 'pending' | 'posted';
-  user: 'user' | 'partner';
+  /**
+   * Transaction type.  A debit represents money leaving the account and
+   * will be subtracted from the balance.  A credit represents money
+   * coming into the account and will be added to the balance.
+   */
   type: 'debit' | 'credit';
 }
 
@@ -71,14 +90,19 @@ export const saveData = (data: CheckbookData): void => {
   }
 };
 
+/**
+ * Calculate the running balance for a list of transactions.
+ *
+ * Transactions marked as debits decrease the balance while credits
+ * increase it.  Since we’ve removed the pending/posted distinction,
+ * every transaction affects the balance immediately.
+ */
 export const calculateBalance = (transactions: Transaction[]): number => {
-  return transactions
-    .filter(t => t.status === 'posted')
-    .reduce((balance, transaction) => {
-      return transaction.type === 'credit' 
-        ? balance + transaction.amount 
-        : balance - transaction.amount;
-    }, 0);
+  return transactions.reduce((balance, transaction) => {
+    return transaction.type === 'credit'
+      ? balance + transaction.amount
+      : balance - transaction.amount;
+  }, 0);
 };
 
 export const generateId = (): string => {

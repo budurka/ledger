@@ -12,9 +12,7 @@ export const exportToCSV = (transactions: Transaction[]): void => {
     'Description',
     'Category',
     'Amount',
-    'Type',
-    'Status',
-    'User'
+    'Type'
   ];
 
   // Convert transactions to CSV rows
@@ -23,9 +21,7 @@ export const exportToCSV = (transactions: Transaction[]): void => {
     `"${transaction.description.replace(/"/g, '""')}"`, // Escape quotes
     transaction.category,
     transaction.amount.toFixed(2),
-    transaction.type,
-    transaction.status,
-    transaction.user
+    transaction.type
   ]);
 
   // Combine headers and rows

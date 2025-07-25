@@ -14,9 +14,18 @@
 
 @layer components {
   .glass-card {
+    /*
+     * Increase the opacity of the background and border in light mode to
+     * improve legibility.  When the design was first created the
+     * opacity was very low (0.1) which caused content on white
+     * backgrounds to appear washed out.  Raising the opacity makes the
+     * cards stand out while retaining the glass effect.  In dark mode
+     * the original values are retained since contrast is already
+     * sufficient.
+     */
     @apply backdrop-blur-xl border rounded-2xl shadow-xl;
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.5);
+    border-color: rgba(255, 255, 255, 0.7);
   }
   
   .dark .glass-card {
@@ -26,12 +35,12 @@
   
   .glass-button {
     @apply backdrop-blur-md border rounded-xl px-4 py-2 transition-all duration-200;
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.4);
+    border-color: rgba(255, 255, 255, 0.6);
   }
   
   .glass-button:hover {
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.5);
     transform: scale(1.05);
   }
   
@@ -50,8 +59,8 @@
   
   .glass-input {
     @apply backdrop-blur-md border rounded-xl px-4 py-2 outline-none transition-all duration-200;
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.4);
+    border-color: rgba(255, 255, 255, 0.6);
     color: rgb(31, 41, 55);
   }
   
@@ -76,8 +85,8 @@
   
   .glass-select {
     @apply backdrop-blur-md border rounded-xl px-4 py-2 outline-none transition-all duration-200;
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.4);
+    border-color: rgba(255, 255, 255, 0.6);
   }
   
   .glass-select:focus {

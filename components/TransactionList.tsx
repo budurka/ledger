@@ -1,14 +1,25 @@
 import React, { useState } from 'react';
-import { Trash2, Filter, User, Users } from 'lucide-react';
+import { Trash2 } from 'lucide-react';
 import { Transaction, formatCurrency, formatDate } from '@/utils/storage';
 
 interface TransactionListProps {
   transactions: Transaction[];
   onDeleteTransaction: (id: string) => void;
-  onUpdateTransaction: (transaction: Transaction) => void;
+  /**
+   * Callback invoked when a transaction is updated.  In this simplified
+   * version there are no in‑place updates (e.g. toggling status), but
+   * this prop remains for potential future extensions such as editing
+   * transaction details.
+   */
+  onUpdateTransaction?: (transaction: Transaction) => void;
 }
 
-type FilterType = 'all' | 'pending' | 'posted' | 'user' | 'partner' | 'debit' | 'credit';
+/**
+ * Filter options for the transaction list.  Since status and per‑user
+ * filters have been removed, the list only supports filtering by
+ * transaction type or showing all.
+ */
+type FilterType = 'all' | 'debit' | 'credit';
 
 export const TransactionList: React.FC<TransactionListProps> = ({
   transactions,
@@ -21,14 +32,6 @@ export const TransactionList: React.FC<TransactionListProps> = ({
 
   const filteredTransactions = transactions.filter(transaction => {
     switch (filter) {
-      case 'pending':
-        return transaction.status === 'pending';
-      case 'posted':
-        return transaction.status === 'posted';
-      case 'user':
-        return transaction.user === 'user';
-      case 'partner':
-        return transaction.user === 'partner';
       case 'debit':
         return transaction.type === 'debit';
       case 'credit':
@@ -65,13 +68,7 @@ export const TransactionList: React.FC<TransactionListProps> = ({
     }
   };
 
-  const toggleStatus = (transaction: Transaction) => {
-    const updatedTransaction = {
-      ...transaction,
-      status: transaction.status === 'pending' ? 'posted' as const : 'pending' as const
-    };
-    onUpdateTransaction(updatedTransaction);
-  };
+  // No status toggling is required in this simplified ledger.
 
   if (transactions.length === 0) {
     return (
@@ -97,10 +94,6 @@ export const TransactionList: React.FC<TransactionListProps> = ({
             className="glass-select text-sm text-gray-800 dark:text-white"
           >
             <option value="all">All Transactions</option>
-            <option value="pending">Pending</option>
-            <option value="posted">Posted</option>
-            <option value="user">User</option>
-            <option value="partner">Partner</option>
             <option value="debit">Debits</option>
             <option value="credit">Credits</option>
           </select>
@@ -136,10 +129,6 @@ export const TransactionList: React.FC<TransactionListProps> = ({
                   <h3 className="font-medium text-gray-800 dark:text-white truncate">
                     {transaction.description}
                   </h3>
-                  <span className="flex items-center gap-1 text-xs text-gray-600 dark:text-gray-400">
-                    {transaction.user === 'user' ? <User size={12} /> : <Users size={12} />}
-                    {transaction.user}
-                  </span>
                 </div>
                 
                 <div className="flex flex-wrap items-center gap-3 text-sm text-gray-600 dark:text-gray-400">
@@ -147,16 +136,6 @@ export const TransactionList: React.FC<TransactionListProps> = ({
                   <span className="px-2 py-1 rounded-full bg-gray-200/50 dark:bg-gray-700/50">
                     {transaction.category}
                   </span>
-                  <button
-                    onClick={() => toggleStatus(transaction)}
-                    className={`px-2 py-1 rounded-full text-xs font-medium transition-colors ${
-                      transaction.status === 'posted'
-                        ? 'bg-green-200/50 text-green-700 dark:bg-green-800/50 dark:text-green-300 hover:bg-green-200/70 dark:hover:bg-green-800/70'
-                        : 'bg-yellow-200/50 text-yellow-700 dark:bg-yellow-800/50 dark:text-yellow-300 hover:bg-yellow-200/70 dark:hover:bg-yellow-800/70'
-                    }`}
-                  >
-                    {transaction.status}
-                  </button>
                 </div>
               </div>
               

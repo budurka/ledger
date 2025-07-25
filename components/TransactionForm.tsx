@@ -19,8 +19,10 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
     description: '',
     amount: '',
     category: categories[0] || '',
-    status: 'pending' as 'pending' | 'posted',
-    user: 'user' as 'user' | 'partner',
+    /**
+     * Note: in the simplified ledger all transactions are considered
+     * immediately posted and there is no concept of per‑user ownership.
+     */
     type: 'debit' as 'debit' | 'credit'
   });
   const [newCategory, setNewCategory] = useState('');
@@ -40,8 +42,6 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
       description: formData.description.trim(),
       amount: parseFloat(formData.amount),
       category: formData.category,
-      status: formData.status,
-      user: formData.user,
       type: formData.type
     };
 
@@ -53,8 +53,6 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
       description: '',
       amount: '',
       category: categories[0] || '',
-      status: 'pending',
-      user: 'user',
       type: 'debit'
     });
     
@@ -143,7 +141,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
           />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Category
@@ -201,34 +199,12 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({
             </select>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Status
-            </label>
-            <select
-              value={formData.status}
-              onChange={(e) => setFormData({ ...formData, status: e.target.value as 'pending' | 'posted' })}
-              className="glass-select w-full text-gray-800 dark:text-white"
-            >
-              <option value="pending">Pending</option>
-              <option value="posted">Posted</option>
-            </select>
-          </div>
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            User
-          </label>
-          <select
-            value={formData.user}
-            onChange={(e) => setFormData({ ...formData, user: e.target.value as 'user' | 'partner' })}
-            className="glass-select w-full sm:w-48 text-gray-800 dark:text-white"
-          >
-            <option value="user">User</option>
-            <option value="partner">Partner</option>
-          </select>
-        </div>
+        {/*
+          The user dropdown has been removed.  Transactions are no longer
+          associated with a particular person since this is a joint account.
+        */}
 
         <div className="flex gap-3 pt-4">
           <button

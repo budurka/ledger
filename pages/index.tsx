@@ -22,13 +22,48 @@ const HomePage: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const storedData = getStoredData();
-    const calculatedBalance = calculateBalance(storedData.transactions);
-    setData({
-      ...storedData,
-      balance: calculatedBalance
-    });
-    setLoading(false);
+    /**
+     * Load existing data on mount.  We first attempt to fetch the
+     * transaction data from the API route which proxies Google Drive or
+     * other persistence layers.  If that request fails we fall back to
+     * whatever is stored in local storage.  Regardless of the source
+     * we compute the current balance when populating state.
+     */
+    const loadData = async () => {
+      try {
+        const res = await fetch('/api/data');
+        if (res.ok) {
+          const remote = await res.json();
+          // remote may not include balance; compute it here
+          const calculatedBalance = calculateBalance(remote.transactions || []);
+          // If the remote payload doesn’t include categories (e.g. empty array)
+          // fall back to categories from local storage so that the user still
+          // has a starting set of category options.
+          const localFallback = getStoredData();
+          const remoteCategories = Array.isArray(remote.categories) && remote.categories.length
+            ? remote.categories
+            : localFallback.categories;
+          setData({
+            transactions: remote.transactions || [],
+            categories: remoteCategories,
+            balance: calculatedBalance
+          });
+          setLoading(false);
+          return;
+        }
+      } catch (err) {
+        // ignore error and fall back to local storage
+        console.warn('Failed to load remote data, falling back to local storage', err);
+      }
+      const storedData = getStoredData();
+      const calculatedBalance = calculateBalance(storedData.transactions);
+      setData({
+        ...storedData,
+        balance: calculatedBalance
+      });
+      setLoading(false);
+    };
+    loadData();
   }, []);
 
   const updateDataAndSave = (newData: Partial<CheckbookData>) => {
@@ -37,7 +72,23 @@ const HomePage: React.FC = () => {
     const finalData = { ...updatedData, balance: calculatedBalance };
     
     setData(finalData);
+    // persist locally for offline use
     saveData(finalData);
+    // persist remotely via API.  This call is fire-and-forget; we don’t
+    // await it here because failure shouldn’t block the UI.  The API
+    // implementation can be swapped out for Google Drive integration.
+    try {
+      fetch('/api/data', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          transactions: finalData.transactions,
+          categories: finalData.categories
+        })
+      });
+    } catch (err) {
+      console.warn('Failed to persist data remotely', err);
+    }
   };
 
   const handleAddTransaction = (transaction: Transaction) => {
