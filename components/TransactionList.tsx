@@ -33,7 +33,7 @@ const TransactionList: React.FC<Props> = ({ transactions, onDeleteTransaction })
             </div>
             <div className="flex items-center gap-4">
               <div
-                className={\`text-right font-semibold \${tx.type === "credit" ? "text-green-400" : "text-red-400"}\`}
+                className={`text-right font-semibold ${tx.type === "credit" ? "text-green-400" : "text-red-400"}`}
               >
                 {tx.type === "credit" ? "+" : "-"}${tx.amount.toFixed(2)}
               </div>
