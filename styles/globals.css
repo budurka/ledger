@@ -1,10 +1,21 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Custom global styles */
 body {
-  @apply bg-white text-black dark:bg-neutral-900 dark:text-white;
-  font-family: system-ui, sans-serif;
-  transition: background-color 0.3s, color 0.3s;
+  @apply bg-glassLight dark:bg-glassDark text-black dark:text-white backdrop-blur-xs;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+input, select {
+  @apply bg-white dark:bg-gray-800 text-black dark:text-white border border-gray-300 dark:border-gray-600 rounded px-3 py-1 w-full;
+}
+
+button {
+  @apply bg-gray-100 dark:bg-gray-700 text-black dark:text-white px-4 py-2 rounded shadow;
+}
+
+main {
+  @apply p-4 max-w-2xl mx-auto;
 }
