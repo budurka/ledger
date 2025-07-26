@@ -1,6 +1,4 @@
-"use client";
 
-import React from "react";
 import { Moon, Sun, Download } from "lucide-react";
 import { useTheme } from "./ThemeProvider";
 import { formatCurrency } from "@/utils/storage";
@@ -10,35 +8,39 @@ interface Props {
   onExport: () => void;
 }
 
-const Header: React.FC<Props> = ({ balance, onExport }) => {
-  const { theme, setTheme } = useTheme();
+export default function Header({ balance, onExport }: Props) {
+  const { theme, toggleTheme } = useTheme();
 
   return (
-    <header className="glassmorphic p-6 rounded-2xl shadow-lg mb-6 flex flex-col md:flex-row justify-between items-center gap-4">
-      <div className="text-center md:text-left">
-        <h1 className="text-2xl font-semibold text-white">Joint Checkbook</h1>
-        <p className="text-white/80 mt-1">Current Balance:</p>
-        <div className="text-3xl font-bold text-green-300 mt-1">{formatCurrency(balance)}</div>
-      </div>
+    <header
+      className="backdrop-blur-md bg-white/40 dark:bg-black/30 shadow-md rounded-2xl p-4 mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0"
+    >
+      <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-gray-900 dark:text-white">
+        Ledger Balance:{" "}
+        <span className="font-mono text-primary">{formatCurrency(balance)}</span>
+      </h1>
 
-      <div className="flex items-center gap-4">
-        <button
-          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-          className="text-white hover:text-yellow-300 transition"
-          aria-label="Toggle theme"
-        >
-          {theme === "dark" ? <Sun size={22} /> : <Moon size={22} />}
-        </button>
+      <div className="flex gap-3 justify-end">
         <button
           onClick={onExport}
-          className="text-white hover:text-blue-400 transition"
-          aria-label="Export to CSV"
+          className="px-4 py-2 rounded-xl font-medium border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 hover:bg-gray-100 dark:hover:bg-zinc-700 transition text-sm"
         >
-          <Download size={22} />
+          <Download className="inline-block mr-2 w-4 h-4" />
+          Export CSV
+        </button>
+
+        <button
+          onClick={toggleTheme}
+          aria-label="Toggle Theme"
+          className="p-2 rounded-full border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 hover:bg-gray-100 dark:hover:bg-zinc-700 transition"
+        >
+          {theme === "light" ? (
+            <Moon className="w-5 h-5 text-gray-800" />
+          ) : (
+            <Sun className="w-5 h-5 text-yellow-400" />
+          )}
         </button>
       </div>
     </header>
   );
-};
-
-export default Header;
+}

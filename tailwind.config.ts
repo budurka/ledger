@@ -1,38 +1,24 @@
-import type { Config } from 'tailwindcss'
+import type { Config } from "tailwindcss";
 
 const config: Config = {
-  darkMode: 'class',
+  darkMode: "class",
   content: [
-    './pages/**/*.{js,ts,jsx,tsx}',
-    './components/**/*.{js,ts,jsx,tsx}',
-    './styles/**/*.{css}',
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./styles/**/*.css"
   ],
   theme: {
     extend: {
-      fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-      },
       colors: {
-        brand: {
-          DEFAULT: '#6366f1',
-          dark: '#4f46e5',
-        },
+        card: "rgba(255, 255, 255, 0.1)",
+        border: "rgba(255, 255, 255, 0.3)"
       },
       backdropBlur: {
-        xs: '2px',
-      },
-      dropShadow: {
-        glass: '0 4px 30px rgba(0, 0, 0, 0.1)',
-      },
-      backgroundColor: {
-        glass: 'rgba(255, 255, 255, 0.05)',
-      },
-      borderColor: {
-        glass: 'rgba(255, 255, 255, 0.2)',
+        sm: "4px",
       },
     },
   },
   plugins: [],
-}
+};
 
-export default config
+export default config;
