@@ -1,28 +1,46 @@
+
 import Head from "next/head";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import Header from "@/components/Header";
 import TransactionForm from "@/components/TransactionForm";
 import TransactionList from "@/components/TransactionList";
 import { useEffect, useState } from "react";
-import { Transaction, getStoredTransactions, storeTransactions } from "@/utils/storage";
+import { Transaction } from "@/utils/storage";
 
 export default function Home() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
 
   useEffect(() => {
-    setTransactions(getStoredTransactions());
+    const fetchTransactions = async () => {
+      try {
+        const res = await fetch("/api/data");
+        const { transactions } = await res.json();
+        setTransactions(transactions);
+      } catch (err) {
+        console.error("Failed to load transactions:", err);
+      }
+    };
+    fetchTransactions();
   }, []);
 
-  const handleNewTransaction = (tx: Transaction) => {
-    const newTx = [...transactions, tx];
-    setTransactions(newTx);
-    storeTransactions(newTx);
+  const handleNewTransaction = async (tx: Transaction) => {
+    try {
+      const res = await fetch("/api/data", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(tx),
+      });
+      const { transactions } = await res.json();
+      setTransactions(transactions);
+    } catch (err) {
+      console.error("Failed to save transaction:", err);
+    }
   };
 
   const handleDeleteTransaction = (id: string) => {
     const newTx = transactions.filter((tx) => tx.id !== id);
     setTransactions(newTx);
-    storeTransactions(newTx);
+    // This should eventually call a backend endpoint too
   };
 
   const handleExport = () => {
