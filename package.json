@@ -1,22 +1,31 @@
 {
   "name": "ledger",
   "version": "1.0.0",
+  "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "lint": "next lint",
     "vercel-build": "next build"
   },
   "dependencies": {
-    "next": "14.1.4",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "uuid": "^9.0.0",
-    "clsx": "^2.1.0"
+    "@headlessui/react": "^1.7.15",
+    "autoprefixer": "^10.4.15",
+    "clsx": "^2.1.0",
+    "lucide-react": "^0.284.0",
+    "next": "^14.1.4",
+    "postcss": "^8.4.31",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tailwindcss": "^3.4.3",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@types/node": "^20.4.2",
-    "@types/react": "^18.2.15",
-    "typescript": "^5.2.2"
+    "@types/react": "^18.2.14",
+    "eslint": "8.46.0",
+    "eslint-config-next": "13.4.12",
+    "typescript": "^5.3.3"
   }
 }
